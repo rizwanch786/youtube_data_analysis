@@ -3,6 +3,18 @@
 Project to analyse the youtube's video data by fetching data through the youtube's **APIs**,
 then storing it into **SQLite** database and performing data analysis using queries and other techniques.
 ### Step 01 : Requirements
+* **Create Virtual Environment**
+
+``` virtualenv envs ```
+
+* **Activate Virtual environment**
+
+``` source envs/bin/activate ```
+
+* **Pip the requirements.txt **
+
+ ```pip install -r requirements.txt```
+
 * python == 3.8
 * antiorm==1.2.1
 * certifi==2021.5.30
@@ -25,11 +37,16 @@ then storing it into **SQLite** database and performing data analysis using quer
   - Videos
   - Tags
   - Videos_vs_Tags
+
+``` connection.py ```
+
 - **Fetch Data**
   - Use API
   - Keyword (python)
 - **Clean up Data**
 - **Store data in DB**
+
+``` fetch_data.py ```
 
 ### Step 03 : Quries for Analysis Data
 * Tag Vs number videos
@@ -40,8 +57,13 @@ then storing it into **SQLite** database and performing data analysis using quer
 * Classify tags as Tutorials, demos, live coding etc
 * And calculate above data for each category
 
+``` test.py ```
+
 * **Output:**
   * As Excel file sheets
+  
+  ``` Excel_files/ ```
+  
 * **Some more Quries**
   * tags vs no.of comments
   * tags vs no.of view count
