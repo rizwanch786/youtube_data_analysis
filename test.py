@@ -9,7 +9,7 @@ con = sqlite3.connect("youtube_data.db")
 def CreateExcelFile(con, q, filename):
     df = pd.read_sql_query(q, con)
     
-    df.to_excel(filename+'.xlsx', index=False, header=True)
+    df.to_excel('Excel_files/'+filename+'.xlsx', index=False, header=True)
     # con.close()
 
 
