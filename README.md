@@ -33,12 +33,15 @@ then storing it into **SQLite** database and performing data analysis using quer
 
 ### Step 02 : Implementation
 - **Create Database connection** 👍
+
+``` connection.py ```
+
 - **Create Tables**
   - Videos
   - Tags
   - Videos_vs_Tags
 
-``` connection.py ```
+```create_tables.py```
 
 - **Fetch Data**
   - Use API
@@ -48,7 +51,7 @@ then storing it into **SQLite** database and performing data analysis using quer
 
 ``` fetch_data.py ```
 
-### Step 03 : Quries for Analysis Data
+### Step 03 : Queries for Analysis Data
 * Tag Vs number videos
 * Tag with most videos, least videos etc
 * Tag vs Avg duration of videos
@@ -57,14 +60,14 @@ then storing it into **SQLite** database and performing data analysis using quer
 * Classify tags as Tutorials, demos, live coding etc
 * And calculate above data for each category
 
-``` test.py ```
+``` analyzer.py ```
 
 * **Output:**
   * As Excel file sheets
   
   ``` Excel_files/ ```
   
-* **Some more Quries**
+* **Some more Queries**
   * tags vs no.of comments
   * tags vs no.of view count
   * tags vs no.of likes count 
