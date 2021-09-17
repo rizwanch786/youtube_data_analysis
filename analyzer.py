@@ -50,9 +50,9 @@ CreateExcelFile(con, q7, filename7)
 
 
 # Bounce
-bounce = "SELECT tags.name AS Tags, sum(videos.comment_count) AS Comments, sum(videos.view_count) AS View, sum(videos.like_count) AS Like FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) Group BY tags.id"
-bounce_file = 'Bounce'
+bonus = "SELECT tags.name AS Tags, sum(videos.comment_count) AS Comments, sum(videos.view_count) AS View, sum(videos.like_count) AS Like FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) Group BY tags.id"
+bonus_file = 'Bonus'
 
-CreateExcelFile(con, bounce, bounce_file)
+CreateExcelFile(con, bonus, bonus_file)
 
 con.close()
