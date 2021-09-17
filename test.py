@@ -1,49 +1,58 @@
+import pandas as pd
+import sqlite3
 
-# a=5
-# b=6
-# print(lambda a,b:a+b)
+# Read sqlite query results into a pandas DataFrame
+con = sqlite3.connect("youtube_data.db")
 
-# some_list = [1,2,3,4,5,6,7,8,9,10]
-#
-# square = [i**2 for i in some_list]
-#
-# print(square)
 
-# number = 689
-# # string_num = f'{number}'
-# first_num = number//100
-# second_number = number//10
 
-# def alpha(name):
-#     '''
-#         alpha
-#     '''
-#     name_1 = 'Naeem'
-#     return [name, name_1][name == 'Raahim']
-#
-#
-# print(alpha("Naeem").__doc__)
+def CreateExcelFile(con, q, filename):
+    df = pd.read_sql_query(q, con)
+    
+    df.to_excel(filename+'.xlsx', index=False, header=True)
+    # con.close()
 
-# def generate_nums():
-#     # for i in range(10):
-#     #     yield i
-#     list_1 = [1,2,3,4,5,6,7,8,9,10]
-#     for i in range
-#     yield list_1
-#
-#
-# for i in generate_nums():
-#     print(i)
-#
-# for i in generate_nums():
-#     print(i)
 
-#
-# list_1 = [1,2,3]
-# list_2 = [3,4,5]
-#
-# for i,j in zip(list_1, list_2):
-#     print(i,j)
+# Quries
+# Tags vs Number Videos
+q1 = "SELECT tags.name AS Tags, count(videos.id) AS video_name FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) GROUP BY tags.id;"
+filename1 = 'tagsvsvideos'
+# Tags vs Most and Least Videos
+q2 = "SELECT tags.name AS Tags, max(videos.id) as Most_Videos , min(videos.id) AS Least_Videos FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id)"
+filename2 = 'tageWithMostAndLeastVideos'
+# Tags vs Average Duration of videos
+q3 = "SELECT tags.name AS Tags, avg(videos.duration) AS AVG_Duration FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) GROUP BY tags.id;"
+filename3 = 'AvgDurationOfVideos'
+# Tag with most video time, least video time
+q4 = "SELECT tags.name AS Tags, max(videos.duration) AS Most_Video_Time, min(videos.duration) AS Least_Video_Time FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) GROUP BY tags.id;"
+filename4 = 'mostAndLeastVideoTime'
 
-list_1 = [1,2,3]
-map(lambda a:a**2, list_1)
+#Classify tags as Tutorials, demos, live coding
+# Tags as Tutorials
+q5 = "SELECT tags.name AS Tutorials FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) where tags.name like '%tutorial%' GROUP BY tags.id;"
+filename5 = 'tags_as_tutorials'
+# Tags as demos
+q6 = "SELECT tags.name AS demos FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) where tags.name like '%demos%' GROUP BY tags.id;"
+filename6 = 'tags_as_demos'
+# Tags as coding
+q7 = "SELECT tags.name AS Live_Coding FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) where tags.name like '%cod%' GROUP BY tags.id;"
+filename7 = 'tags_as_liveCoding'
+
+
+# # Drivers
+CreateExcelFile(con, q1, filename1)
+CreateExcelFile(con, q2, filename2)
+CreateExcelFile(con, q3, filename3)
+CreateExcelFile(con, q4, filename4)
+CreateExcelFile(con, q5, filename5)
+CreateExcelFile(con, q6, filename6)
+CreateExcelFile(con, q7, filename7)
+
+
+# Bounce
+bounce = "SELECT tags.name AS Tags, sum(videos.comment_count) AS Comments, sum(videos.view_count) AS View, sum(videos.like_count) AS Like FROM ((videos_vs_tags INNER JOIN videos on videos_vs_tags.tag_id = tags.id) INNER JOIN tags on videos_vs_tags.video_id = videos.id) Group BY tags.id"
+bounce_file = 'Bounce'
+
+CreateExcelFile(con, bounce, bounce_file)
+
+con.close()
