@@ -26,23 +26,18 @@ def youtube_search_api(query, part, api_key, **kwargs):
     data = response.json()
     global next_page_token
     next_page_token = data['nextPageToken']
-    video_items = data.get('items')
-    return video_items
+    return data.get('items')
 
 video_items = youtube_search_api(query, part, API_KEY)
 
 filtered_items = []
-counter = 0
-for item in video_items:
-    counter += 1
-    filtered_info = {}
+for counter, item in enumerate(video_items, start=1):
     video_id = item.get('id').get('videoId')
     video_detail_url = f'https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id={video_id}&key={API_KEY}'
     response = requests.get(video_detail_url)
     detailed_data = response.json()
 
-    filtered_info['video_id'] = video_id
-    filtered_info['snippet'] = {}
+    filtered_info = {'video_id': video_id, 'snippet': {}}
     filtered_info['snippet']['title'] = item.get('snippet').get('title')
     filtered_info['snippet']['channel_title'] = item.get('snippet').get('channelTitle')
     filtered_info['snippet']['publish_time'] = item.get('snippet').get('publishTime')

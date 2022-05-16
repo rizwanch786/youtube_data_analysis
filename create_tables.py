@@ -17,12 +17,20 @@ def create_table(conn, create_table_sql):
 def main():
     database = r"youtube_data.db"
 
-    sql_create_tags_table = """ CREATE TABLE IF NOT EXISTS tags (
+    # create a database connection
+    conn = create_connection(database)
+
+    # create tables
+    if conn is not None:
+        sql_create_tags_table = """ CREATE TABLE IF NOT EXISTS tags (
                                         id integer PRIMARY KEY AUTOINCREMENT,
                                         name text NOT NULL
                                     ); """
 
-    sql_create_videos_table = """CREATE TABLE IF NOT EXISTS videos (
+        # create tags table
+        create_table(conn, sql_create_tags_table)
+        print('done 1')
+        sql_create_videos_table = """CREATE TABLE IF NOT EXISTS videos (
                                     id integer PRIMARY KEY AUTOINCREMENT,
                                     video_id text NULL,
                                     title text NOT NULL,
@@ -35,7 +43,10 @@ def main():
                                     favorite_count integer NOT NULL,
                                     comment_count integer NOT NULL
                                 );"""
-    sql_create_videosvstags_table = """
+        # create videos table
+        create_table(conn, sql_create_videos_table)
+        print('done 2')
+        sql_create_videosvstags_table = """
                                     CREATE TABLE IF NOT EXISTS videos_vs_tags (
                                         id integer PRIMARY KEY AUTOINCREMENT,
                                         video_id integer NOT NULL,
@@ -46,17 +57,6 @@ def main():
                                     """
 
 
-    # create a database connection
-    conn = create_connection(database)
-
-    # create tables
-    if conn is not None:
-        # create tags table
-        create_table(conn, sql_create_tags_table)
-        print('done 1')
-        # create videos table
-        create_table(conn, sql_create_videos_table)
-        print('done 2')
         # create videos vs tags table
         create_table(conn, sql_create_videosvstags_table)
         print('done 3')

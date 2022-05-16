@@ -1,9 +1,8 @@
 
 
 def insert_data_to_db(cursor, conn, filtered_data):
-    counter = 0
     tag_counter = 0
-    for obj in filtered_data:
+    for counter, obj in enumerate(filtered_data, start=1):
         duration = obj['content_details']['duration']
         # print(duration)
         hour_check = True
@@ -15,25 +14,24 @@ def insert_data_to_db(cursor, conn, filtered_data):
             hour_check = False
 
         if duration.find('M') != -1:
-            if hour_check == False:
-                minutes = duration[duration.find('T') + 1:duration.find('M')]
-            else:
-                minutes = duration[duration.find('H') + 1:duration.find('M')]
+            minutes = (
+                duration[duration.find('H') + 1 : duration.find('M')]
+                if hour_check
+                else duration[duration.find('T') + 1 : duration.find('M')]
+            )
+
         else:
             minutes = 0
             minute_check = False
 
 
-        if duration.find('S') != -1:
-            if minute_check == False:
-                minutes = duration[duration.find('H') + 1:duration.find('S')]
-            else:
-                seconds = duration[duration.find('M') + 1:duration.find('S')]
-        else:
+        if duration.find('S') == -1:
             seconds = 0
+        elif not minute_check:
+            minutes = duration[duration.find('H') + 1:duration.find('S')]
+        else:
+            seconds = duration[duration.find('M') + 1:duration.find('S')]
         total_duration_seconds = int(hours) * 60 * 60 + int(minutes) * 60 + int(seconds)
-        counter += 1
-
         try:
             view_count = obj['statistics']['viewCount']
         except Exception as e:
@@ -78,14 +76,14 @@ def insert_data_to_db(cursor, conn, filtered_data):
                 tag_counter += 1
                 if res:
                     # print(res[0][0])
-                    sql_query_1 = f'INSERT into videos_vs_tags values(?, ?, ?)'
+                    sql_query_1 = 'INSERT into videos_vs_tags values(?, ?, ?)'
                     cursor.execute(sql_query_1, (tag_counter, counter, res[0][0]))
                 else:
 
-                    sql_query = f'INSERT into tags values(?, ?)'
+                    sql_query = 'INSERT into tags values(?, ?)'
                     cursor.execute(sql_query, (tag_counter, tag))
 
-                    sql_query_1 = f'INSERT into videos_vs_tags values(?, ?, ?)'
+                    sql_query_1 = 'INSERT into videos_vs_tags values(?, ?, ?)'
                     cursor.execute(sql_query_1, (tag_counter, counter, tag_counter))
 
         except Exception as e:
